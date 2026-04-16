@@ -41,7 +41,7 @@
 
 {{-- ─── NAV ─── --}}
 <nav class="sticky top-0 z-50 flex items-center justify-between px-16 py-4 bg-[#0B0C14]/75 backdrop-blur-xl border-b border-white/[0.06]">
-    <a href="#" class="flex items-center gap-2 font-display font-bold text-[1.15rem] text-[#F2F1EC] no-underline">
+    <a href="{{route('register')}}" class="flex items-center gap-2 font-display font-bold text-[1.15rem] text-[#F2F1EC] no-underline">
         <span class="w-2.5 h-2.5 rounded-full bg-[#C9F050] flex-shrink-0"></span>
         SchoolHelp
     </a>
@@ -53,10 +53,10 @@
     </ul>
 
     <div class="flex items-center gap-3">
-        <a href="#" class="inline-flex items-center px-5 py-2 rounded-full text-sm font-medium text-[#5C5F7A] border border-[#2E3046] hover:bg-[#1C1D2A] hover:text-[#F2F1EC] hover:border-[#5C5F7A] transition-all no-underline">
+        <a href="{{route('login')}}" class="inline-flex items-center px-5 py-2 rounded-full text-sm font-medium text-[#5C5F7A] border border-[#2E3046] hover:bg-[#1C1D2A] hover:text-[#F2F1EC] hover:border-[#5C5F7A] transition-all no-underline">
             Přihlásit se
         </a>
-        <a href="#" class="inline-flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-bold bg-[#C9F050] text-[#0B0C14] hover:bg-[#d8ff60] hover:-translate-y-px glow-lime transition-all no-underline">
+        <a href="{{route('register')}}" class="inline-flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-bold bg-[#C9F050] text-[#0B0C14] hover:bg-[#d8ff60] hover:-translate-y-px glow-lime transition-all no-underline">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Začít
         </a>
