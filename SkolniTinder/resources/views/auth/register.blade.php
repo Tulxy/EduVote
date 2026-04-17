@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Registrace - SchoolHelp</title>
+    <title>Registrace - EduVote</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -53,7 +53,7 @@
 <nav class="relative z-10 flex items-center justify-between px-6 lg:px-16 py-4 border-b border-white/[0.06]">
     <a href="{{ url('/') }}" class="flex items-center gap-2 font-display font-bold text-[1.15rem] text-[#F2F1EC] no-underline">
         <span class="w-2.5 h-2.5 rounded-full bg-[#C9F050]"></span>
-        SchoolHelp
+        EduVote
     </a>
     <a href="{{ route('login') }}" class="text-sm text-[#5C5F7A] hover:text-[#F2F1EC] transition-colors no-underline">
         Už máš účet? <span class="text-[#C9F050]">Přihlásit se</span>
