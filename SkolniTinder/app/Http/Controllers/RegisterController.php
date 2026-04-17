@@ -3,39 +3,49 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\School;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
-    // 1. Zobrazení registračního formuláře
-    public function showRegistrationForm()
-    {
+    public function showRegistrationForm() {
         return view('auth.register');
     }
 
-    // 2. Zpracování registrace
-    public function register(Request $request)
-    {
-        // Validace vstupů
+    public function register(Request $request) {
         $request->validate([
+            // Škola
+            'school_name' => ['required', 'string', 'max:255'],
+            'school_address' => ['required', 'string', 'max:255'],
+            'student_code' => ['required', 'string', 'unique:schools'],
+            // Správce
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', 'min:8'], // 'confirmed' vyžaduje pole password_confirmation
+            'email' => ['required', 'string', 'email', 'unique:users'],
+            'password' => ['required', 'confirmed', 'min:8'],
         ]);
 
-        // Vytvoření uživatele
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password), // VŽDY heslo hashujeme!
-        ]);
+        $user = DB::transaction(function () use ($request) {
+            // 1. Vytvoření školy
+            $school = School::create([
+                'name' => $request->school_name,
+                'address' => $request->school_address,
+                'student_code' => $request->student_code,
+            ]);
 
-        // Automatické přihlášení po registraci
+            // 2. Vytvoření uživatele (správce) přiřazeného k této škole
+            return User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'school_id' => $school->id,
+                'role' => 'admin',
+            ]);
+        });
+
         Auth::login($user);
-
-        // Přesměrování na dashboard
         return redirect()->route('dashboard');
     }
 }
