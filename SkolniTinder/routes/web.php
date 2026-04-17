@@ -15,6 +15,28 @@ Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->na
 Route::post('/register/school', [RegisterController::class, 'registerSchool'])->name('register.school');
 Route::post('/register/user', [RegisterController::class, 'registerUser'])->name('register.user');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('/autors', function () {
+    return view('pages.autors');
+})->name('autors');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
+    Route::get('/voting', function () {
+        return view('pages.voting');
+    })->name('voting');
+
+    Route::get('/ideas', function () {
+        return view('pages.ideas');
+    })->name('ideas');
+
+    Route::get('/create', function () {
+        return view('pages.ideas.create');
+    })->name('create');
+
+    Route::get('/user-ideas', function () {
+        return view('pages.ideas.user-ideas');
+    })->name('user-ideas');
+});

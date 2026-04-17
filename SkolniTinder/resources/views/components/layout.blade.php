@@ -23,21 +23,6 @@
         @keyframes float3 { 0%,100%{transform:translateY(0px) rotate(-.5deg)} 50%{transform:translateY(-12px) rotate(.5deg)} }
         @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
         @keyframes pulse { 0%,100%{opacity:.3;transform:scale(1)} 50%{opacity:1;transform:scale(1.4)} }
-
-        .float-1 { animation: float1 6s ease-in-out infinite; }
-        .float-2 { animation: float2 7s ease-in-out infinite; }
-        .float-3 { animation: float3 5.5s ease-in-out infinite; }
-        .fade-up-1 { animation: fadeUp .5s ease both; }
-        .fade-up-2 { animation: fadeUp .5s .1s ease both; }
-        .fade-up-3 { animation: fadeUp .5s .2s ease both; }
-        .fade-up-4 { animation: fadeUp .5s .3s ease both; }
-        .fade-up-5 { animation: fadeUp .5s .4s ease both; }
-        .pulse-dot { animation: pulse 3s ease-in-out infinite; }
-        .pulse-dot-2 { animation: pulse 3s 1s ease-in-out infinite; }
-
-        .accent-underline { position:relative; }
-        .accent-underline::after { content:''; position:absolute; bottom:4px; left:0; width:100%; height:3px; background:#c9f050; border-radius:2px; opacity:.4; }
-        .glow-lime { box-shadow: 0 8px 24px rgba(201,240,80,.25); }
     </style>
 </head>
 <body class="antialiased">
@@ -56,8 +41,10 @@
                 Dashboard
             </a>
         </li>
+        <li><a href="{{ url('/voting') }}" class="text-sm text-[#C9F050] hover:text-[#F2F1EC] transition-colors no-underline">Hlasování</a></li>
         <li><a href="{{ url('/ideas') }}" class="text-sm text-[#5C5F7A] hover:text-[#F2F1EC] transition-colors no-underline">Všechny nápady</a></li>
-        <li><a href="{{ url('/ideas/create') }}" class="text-sm text-[#5C5F7A] hover:text-[#F2F1EC] transition-colors no-underline">Přidat nápad</a></li>
+        <li><a href="{{ url('/create') }}" class="text-sm text-[#5C5F7A] hover:text-[#F2F1EC] transition-colors no-underline">Přidat nápad</a></li>
+        <li><a href="{{ url('/user-ideas') }}" class="text-sm text-[#5C5F7A] hover:text-[#F2F1EC] transition-colors no-underline">Moje nápady</a></li>
         @if(auth()->user()->is_admin ?? false)
             <li><a href="{{ url('/admin') }}" class="text-sm text-[#FF6B52] hover:text-[#ff8a75] transition-colors no-underline">Admin</a></li>
         @endif
@@ -86,5 +73,71 @@
 <main class="w-full min-h-screen">
     {{ $slot }}
 </main>
+
+{{-- resources/views/components/footer.blade.php --}}
+{{-- Použití: <x-footer /> --}}
+
+<footer class="relative z-10 border-t border-white/[0.06] mt-auto">
+    <div class="max-w-[1300px] mx-auto px-6 lg:px-12 py-12">
+
+        {{-- Top row --}}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
+
+            {{-- Brand --}}
+            <div>
+                <a href="{{ url('/') }}" class="flex items-center gap-2 font-display font-bold text-[1.15rem] text-[#F2F1EC] no-underline mb-3">
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#C9F050]"></span>
+                    SchoolHelp
+                </a>
+                <p class="text-sm text-[#5C5F7A] leading-relaxed max-w-[240px]">
+                    Platforma, kde žáci navrhují vylepšení školy a komunita rozhoduje.
+                </p>
+            </div>
+
+            {{-- Links --}}
+            <div>
+                <p class="text-xs text-[#5C5F7A] uppercase tracking-widest mb-4">Navigace</p>
+                <ul class="flex flex-col gap-2.5 list-none">
+                    <li><a href="{{ url('/') }}"         class="text-sm text-[#5C5F7A] hover:text-[#F2F1EC] transition-colors no-underline">Domů</a></li>
+                    <li><a href="{{ url('/voting') }}"   class="text-sm text-[#5C5F7A] hover:text-[#F2F1EC] transition-colors no-underline">Hlasování</a></li>
+                    <li><a href="{{ url('/dashboard') }}" class="text-sm text-[#5C5F7A] hover:text-[#F2F1EC] transition-colors no-underline">Dashboard</a></li>
+                    @guest
+                        <li><a href="{{ route('login') }}"    class="text-sm text-[#5C5F7A] hover:text-[#F2F1EC] transition-colors no-underline">Přihlásit se</a></li>
+                        <li><a href="{{ route('register') }}" class="text-sm text-[#5C5F7A] hover:text-[#F2F1EC] transition-colors no-underline">Registrace</a></li>
+                    @endguest
+                </ul>
+            </div>
+
+            {{-- CTA --}}
+            <div>
+                <p class="text-xs text-[#5C5F7A] uppercase tracking-widest mb-4">Zapoj se</p>
+                <p class="text-sm text-[#5C5F7A] leading-relaxed mb-4">
+                    Máš nápad na vylepšení školy? Přidej ho a nech ostatní hlasovat.
+                </p>
+                <a href="{{ url('/voting') }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold bg-[#C9F050] text-[#0B0C14] hover:bg-[#d8ff60] transition-all no-underline" style="box-shadow: 0 8px 24px rgba(201,240,80,.2)">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Přidat nápad
+                </a>
+            </div>
+        </div>
+
+        {{-- Divider --}}
+        <div class="border-t border-[#2E3046] mb-6"></div>
+
+        {{-- Bottom row --}}
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p class="text-xs text-[#5C5F7A]">
+                &copy; {{ date('Y') }} SchoolHelp. Vytvořeno s
+                <span class="text-[#FF6B52]">♥</span>
+                pro lepší školy.
+            </p>
+            <div class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-[#C9F050] animate-pulse"></span>
+                <span class="text-xs text-[#5C5F7A]">Systém běží</span>
+            </div>
+        </div>
+
+    </div>
+</footer>
 </body>
 </html>
