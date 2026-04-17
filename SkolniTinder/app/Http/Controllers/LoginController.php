@@ -12,22 +12,26 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
-    public function authenticate(Request $request) {
+    public function authenticate(Request $request)
+    {
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+            'login' => ['required', 'string'],
+            'password' => ['required', 'string'],
         ]);
 
+        // Zkusíme najít uživatele podle e-mailu NEBO jména
+        $fieldType = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'name';
+
         // Pokus o přihlášení
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt([$fieldType => $request->login, 'password' => $request->password], $request->remember)) {
             $request->session()->regenerate();
             return redirect()->intended('dashboard');
         }
 
-        // Pokud se to nepovede
+        // Pokud se nepovede, vrátíme chybu k poli 'login'
         return back()->withErrors([
-            'email' => 'Špatné heslo nebo email.',
-        ])->onlyInput('email');
+            'login' => 'Zadané údaje neodpovídají našim záznamům.',
+        ])->onlyInput('login');
     }
 
     // Odhlášení
