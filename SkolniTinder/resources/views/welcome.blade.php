@@ -207,6 +207,73 @@
     </div>
 </div>
 
+{{-- resources/views/components/footer.blade.php --}}
+{{-- Použití: <x-footer /> --}}
+
+<footer class="relative z-10 border-t border-white/[0.06] mt-auto">
+    <div class="max-w-[1300px] mx-auto px-6 lg:px-12 py-12">
+
+        {{-- Top row --}}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
+
+            {{-- Brand --}}
+            <div>
+                <a href="{{ url('/') }}" class="flex items-center gap-2 font-display font-bold text-[1.15rem] text-[#F2F1EC] no-underline mb-3">
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#C9F050]"></span>
+                    EduVote
+                </a>
+                <p class="text-sm text-[#5C5F7A] leading-relaxed max-w-[240px]">
+                    Platforma, kde žáci navrhují vylepšení školy a komunita rozhoduje.
+                </p>
+            </div>
+
+            {{-- Links --}}
+            <div>
+                <p class="text-xs text-[#5C5F7A] uppercase tracking-widest mb-4">Navigace</p>
+                <ul class="flex flex-col gap-2.5 list-none">
+                    <li><a href="{{ url('/') }}"         class="text-sm text-[#5C5F7A] hover:text-[#F2F1EC] transition-colors no-underline">Domů</a></li>
+                    <li><a href="{{ url('/voting') }}"   class="text-sm text-[#5C5F7A] hover:text-[#F2F1EC] transition-colors no-underline">Hlasování</a></li>
+                    <li><a href="{{ url('/dashboard') }}" class="text-sm text-[#5C5F7A] hover:text-[#F2F1EC] transition-colors no-underline">Dashboard</a></li>
+                    @guest
+                        <li><a href="{{ route('login') }}"    class="text-sm text-[#5C5F7A] hover:text-[#F2F1EC] transition-colors no-underline">Přihlásit se</a></li>
+                        <li><a href="{{ route('register') }}" class="text-sm text-[#5C5F7A] hover:text-[#F2F1EC] transition-colors no-underline">Registrace</a></li>
+                        <li><a href="{{ route('autors') }}" class="text-sm text-[#5C5F7A] hover:text-[#F2F1EC] transition-colors no-underline">Autoři</a></li>
+                    @endguest
+                </ul>
+            </div>
+
+            {{-- CTA --}}
+            <div>
+                <p class="text-xs text-[#5C5F7A] uppercase tracking-widest mb-4">Zapoj se</p>
+                <p class="text-sm text-[#5C5F7A] leading-relaxed mb-4">
+                    Máš nápad na vylepšení školy? Přidej ho a nech ostatní hlasovat.
+                </p>
+                <a href="{{ url('/voting') }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold bg-[#C9F050] text-[#0B0C14] hover:bg-[#d8ff60] transition-all no-underline" style="box-shadow: 0 8px 24px rgba(201,240,80,.2)">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Přidat nápad
+                </a>
+            </div>
+        </div>
+
+        {{-- Divider --}}
+        <div class="border-t border-[#2E3046] mb-6"></div>
+
+        {{-- Bottom row --}}
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p class="text-xs text-[#5C5F7A]">
+                &copy; {{ date('Y') }} EduVote. Vytvořeno s
+                <span class="text-[#FF6B52]">♥</span>
+                pro lepší školy.
+            </p>
+            <div class="flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-[#C9F050] animate-pulse"></span>
+                <span class="text-xs text-[#5C5F7A]">Systém běží</span>
+            </div>
+        </div>
+
+    </div>
+</footer>
+
 <script>
     function toggleVote(btn) {
         const isActive = btn.classList.contains('active');
