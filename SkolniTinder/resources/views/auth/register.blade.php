@@ -65,6 +65,17 @@
         {{-- Header --}}
         <div class="text-center mb-10 fade-up">
             <h1 class="font-display font-extrabold text-3xl text-[#F2F1EC] leading-tight mb-3">Vytvořit účet</h1>
+            @if ($errors->any())
+                <div style="background: rgba(255,107,82,0.1); border: 1px solid #FF6B52; color: #FF6B52; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                    <strong>Chyba při odesílání:</strong>
+                    <ul style="margin-top: 5px; font-size: 0.85rem;">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
 
             {{-- Přepínač (Tabs) --}}
             <div class="flex p-1 bg-[#1C1D2A] border border-[#2E3046] rounded-xl mt-6">
@@ -120,7 +131,7 @@
 
         {{-- FORMULÁŘ 2: ŠKOLA (Skrytý v základu) --}}
         <div id="form-school" class="hidden fade-up-2 bg-[#1C1D2A]/60 backdrop-blur-sm border border-[#2E3046] rounded-2xl p-8">
-            <form method="POST" action="{{ route('register') }}" class="flex flex-col gap-5">
+            <form method="POST" action="{{ route('register.school') }}" class="flex flex-col gap-5">
                 @csrf
                 <h3 class="text-[#C9F050] font-display font-bold text-lg mb-2 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V10"/><path d="m22 7-10-5L2 7l10 5 10-5Z"/></svg>
@@ -136,7 +147,34 @@
 
                 <input type="text" name="name" required placeholder="Vaše jméno" class="input-field">
                 <input type="email" name="email" required placeholder="Váš email" class="input-field">
-                <input type="password" name="password" required placeholder="Heslo" class="input-field">
+                <div class="flex flex-col gap-4">
+                    {{-- Heslo --}}
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-sm font-medium text-[#E8E7F0]">Heslo</label>
+                        <input
+                            type="password"
+                            name="password"
+                            required
+                            placeholder="Minimálně 8 znaků"
+                            class="input-field @error('password') error @enderror"
+                        >
+                        @error('password')
+                        <span class="text-xs text-[#FF6B52] mt-1">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    {{-- Potvrzení hesla --}}
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-sm font-medium text-[#E8E7F0]">Potvrzení hesla</label>
+                        <input
+                            type="password"
+                            name="password_confirmation" {{-- Důležité: musí končit _confirmation --}}
+                            required
+                            placeholder="Zopakuj heslo"
+                            class="input-field"
+                        >
+                    </div>
+                </div>
 
                 <button type="submit" class="mt-2 w-full py-3.5 rounded-full font-bold text-sm bg-[#C9F050] text-[#0B0C14] hover:bg-[#d8ff60] transition-all glow-lime">
                     Vytvořit školu a spravovat

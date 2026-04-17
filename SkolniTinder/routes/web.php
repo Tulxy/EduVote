@@ -12,7 +12,7 @@ Route::post('/login', [LoginController::class, 'authenticate']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register']);
+Route::post('/register/school', [RegisterController::class, 'registerSchool'])->name('register.school');
 Route::post('/register/user', [RegisterController::class, 'registerUser'])->name('register.user');
 
 Route::get('/dashboard', function () {

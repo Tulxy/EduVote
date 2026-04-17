@@ -44,7 +44,7 @@ class RegisterController extends Controller
         return view('auth.register');
     }
 
-    public function register(Request $request) {
+    public function registerSchool(Request $request) {
         $request->validate([
             // Škola
             'school_name' => ['required', 'string', 'max:255'],
@@ -55,6 +55,7 @@ class RegisterController extends Controller
             'email' => ['required', 'string', 'email', 'unique:users'],
             'password' => ['required', 'confirmed', 'min:8'],
         ]);
+
 
         $user = DB::transaction(function () use ($request) {
             // 1. Vytvoření školy
