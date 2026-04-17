@@ -60,213 +60,114 @@
     </a>
 </nav>
 
-{{-- ─── MAIN ─── --}}
 <main class="relative z-10 flex flex-1 items-center justify-center px-4 py-16">
     <div class="w-full max-w-md">
-
         {{-- Header --}}
         <div class="text-center mb-10 fade-up">
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium text-[#C9F050] bg-[#C9F050]/10 border border-[#C9F050]/25 mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
-                Nový účet
+            <h1 class="font-display font-extrabold text-3xl text-[#F2F1EC] leading-tight mb-3">Vytvořit účet</h1>
+
+            {{-- Přepínač (Tabs) --}}
+            <div class="flex p-1 bg-[#1C1D2A] border border-[#2E3046] rounded-xl mt-6">
+                <button onclick="switchTab('student')" id="tab-student" class="flex-1 py-2 text-sm font-medium rounded-lg transition-all bg-[#C9F050] text-[#0B0C14]">
+                    Student / Pedagog
+                </button>
+                <button onclick="switchTab('school')" id="tab-school" class="flex-1 py-2 text-sm font-medium rounded-lg transition-all text-[#5C5F7A] hover:text-[#E8E7F0]">
+                    Nová škola
+                </button>
             </div>
-            <h1 class="font-display font-extrabold text-3xl text-[#F2F1EC] leading-tight mb-3">Zaregistruj se</h1>
-            <p class="text-sm text-[#5C5F7A]">Připoj se ke komunitě a navrhuj vylepšení školy</p>
         </div>
 
-        {{-- Card --}}
-        <div class="fade-up-2 bg-[#1C1D2A]/60 backdrop-blur-sm border border-[#2E3046] rounded-2xl p-8">
-
-            <form method="POST" action="{{ route('register') }}" class="flex flex-col gap-5">
+        {{-- FORMULÁŘ 1: STUDENT / PEDAGOG --}}
+        <div id="form-student" class="fade-up-2 bg-[#1C1D2A]/60 backdrop-blur-sm border border-[#2E3046] rounded-2xl p-8">
+            <form method="POST" action="{{ route('register.user') }}" class="flex flex-col gap-5">
                 @csrf
+                <h3 class="text-[#C9F050] font-display font-bold text-lg mb-2 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    Připojit se ke škole
+                </h3>
 
-                {{-- --- SEKCE: ŠKOLA --- --}}
-                <div class="mb-2">
-                    <h3 class="text-[#C9F050] font-display font-bold text-lg mb-4 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V10"/><path d="m22 7-10-5L2 7l10 5 10-5Z"/><path d="M6 12v5"/><path d="M10 12v5"/><path d="M14 12v5"/><path d="M18 12v5"/></svg>
-                        Údaje o škole
-                    </h3>
-
-                    <div class="flex flex-col gap-4">
-                        {{-- Název školy --}}
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-sm font-medium text-[#E8E7F0]">Název školy</label>
-                            <input
-                                type="text"
-                                name="school_name"
-                                value="{{ old('school_name') }}"
-                                required
-                                placeholder="Střední škola technická..."
-                                class="input-field @error('school_name') error @enderror"
-                            >
-                            @error('school_name')
-                            <span class="flex items-center gap-1.5 text-xs text-[#FF6B52]">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                        {{ $message }}
-                    </span>
-                            @enderror
-                        </div>
-
-                        {{-- Adresa školy --}}
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-sm font-medium text-[#E8E7F0]">Adresa školy</label>
-                            <input
-                                type="text"
-                                name="school_address"
-                                value="{{ old('school_address') }}"
-                                required
-                                placeholder="Ulice 123, Město"
-                                class="input-field @error('school_address') error @enderror"
-                            >
-                            @error('school_address')
-                            <span class="flex items-center gap-1.5 text-xs text-[#FF6B52]">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                        {{ $message }}
-                    </span>
-                            @enderror
-                        </div>
-
-                        {{-- Kód pro studenty --}}
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-sm font-medium text-[#E8E7F0]">Registrační kód pro studenty</label>
-                            <input
-                                type="text"
-                                name="student_code"
-                                value="{{ old('student_code') }}"
-                                required
-                                placeholder="Např. SOS-BRNO-2026"
-                                class="input-field @error('student_code') error @enderror"
-                            >
-                            <p class="text-[10px] text-[#5C5F7A]">Tento kód budou zadávat studenti při své registraci.</p>
-                            @error('student_code')
-                            <span class="flex items-center gap-1.5 text-xs text-[#FF6B52]">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                        {{ $message }}
-                    </span>
-                            @enderror
-                        </div>
-                    </div>
+                {{-- Role --}}
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-sm font-medium text-[#E8E7F0]">Jsem...</label>
+                    <select name="role" class="input-field">
+                        <option value="student">Student</option>
+                        <option value="pedagog">Pedagog</option>
+                    </select>
                 </div>
 
-                <div class="border-t border-white/[0.06] my-2"></div>
-
-                {{-- --- SEKCE: SPRÁVCE --- --}}
-                <div>
-                    <h3 class="text-[#C9F050] font-display font-bold text-lg mb-4 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 11h-6"/><path d="M19 8v6"/></svg>
-                        Údaje správce
-                    </h3>
-
-                    <div class="flex flex-col gap-4">
-                        {{-- Jméno --}}
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-sm font-medium text-[#E8E7F0]">Celé jméno</label>
-                            <input
-                                type="text"
-                                name="name"
-                                value="{{ old('name') }}"
-                                required
-                                placeholder="Mgr. Jan Novák"
-                                class="input-field @error('name') error @enderror"
-                            >
-                            @error('name')
-                            <span class="flex items-center gap-1.5 text-xs text-[#FF6B52]">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                        {{ $message }}
-                    </span>
-                            @enderror
-                        </div>
-
-                        {{-- Email --}}
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-sm font-medium text-[#E8E7F0]">Pracovní e-mail</label>
-                            <input
-                                type="email"
-                                name="email"
-                                value="{{ old('email') }}"
-                                required
-                                placeholder="novak@skola.cz"
-                                class="input-field @error('email') error @enderror"
-                            >
-                            @error('email')
-                            <span class="flex items-center gap-1.5 text-xs text-[#FF6B52]">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                        {{ $message }}
-                    </span>
-                            @enderror
-                        </div>
-
-                        {{-- Heslo --}}
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-sm font-medium text-[#E8E7F0]">Heslo</label>
-                            <div class="relative">
-                                <input
-                                    type="password"
-                                    name="password"
-                                    id="password"
-                                    required
-                                    placeholder="Minimálně 8 znaků"
-                                    class="input-field pr-11 @error('password') error @enderror"
-                                >
-                                <button type="button" onclick="togglePassword('password', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#5C5F7A] hover:text-[#E8E7F0] transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                                </button>
-                            </div>
-                            @error('password')
-                            <span class="flex items-center gap-1.5 text-xs text-[#FF6B52]">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                        {{ $message }}
-                    </span>
-                            @enderror
-                        </div>
-
-                        {{-- Potvrzení hesla --}}
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-sm font-medium text-[#E8E7F0]">Potvrzení hesla</label>
-                            <div class="relative">
-                                <input
-                                    type="password"
-                                    name="password_confirmation"
-                                    id="password_confirmation"
-                                    required
-                                    placeholder="Zopakuj heslo"
-                                    class="input-field pr-11"
-                                >
-                                <button type="button" onclick="togglePassword('password_confirmation', this)" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#5C5F7A] hover:text-[#E8E7F0] transition-colors">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                {{-- Kód školy --}}
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-sm font-medium text-[#E8E7F0]">Unikátní kód školy</label>
+                    <input type="text" name="student_code" required placeholder="Zadej kód od správce" class="input-field @error('student_code') error @enderror">
+                    @error('student_code') <span class="text-xs text-[#FF6B52]">{{ $message }}</span> @enderror
                 </div>
 
-                {{-- Submit --}}
-                <button
-                    type="submit"
-                    class="mt-4 w-full py-3.5 rounded-full font-bold text-sm bg-[#C9F050] text-[#0B0C14] hover:bg-[#d8ff60] hover:-translate-y-px glow-lime transition-all"
-                >
-                    Založit školu a účet správce
+                <div class="border-t border-white/[0.06] my-1"></div>
+
+                {{-- Osobní údaje --}}
+                <div class="flex flex-col gap-4">
+                    <input type="text" name="name" required placeholder="Celé jméno" class="input-field">
+                    <input type="email" name="email" required placeholder="E-mail" class="input-field">
+                    <input type="password" name="password" required placeholder="Heslo" class="input-field">
+                    <input type="password" name="password_confirmation" required placeholder="Potvrzení hesla" class="input-field">
+                </div>
+
+                <button type="submit" class="mt-2 w-full py-3.5 rounded-full font-bold text-sm bg-[#C9F050] text-[#0B0C14] hover:bg-[#d8ff60] transition-all glow-lime">
+                    Zaregistrovat se
                 </button>
             </form>
         </div>
 
-        {{-- Footer link --}}
-        <p class="fade-up-3 text-center text-xs text-[#5C5F7A] mt-6">
-            Registrací souhlasíš s
-            <a href="#" class="text-[#C9F050] hover:underline">podmínkami použití</a>
-        </p>
+        {{-- FORMULÁŘ 2: ŠKOLA (Skrytý v základu) --}}
+        <div id="form-school" class="hidden fade-up-2 bg-[#1C1D2A]/60 backdrop-blur-sm border border-[#2E3046] rounded-2xl p-8">
+            <form method="POST" action="{{ route('register') }}" class="flex flex-col gap-5">
+                @csrf
+                <h3 class="text-[#C9F050] font-display font-bold text-lg mb-2 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V10"/><path d="m22 7-10-5L2 7l10 5 10-5Z"/></svg>
+                    Založit novou školu
+                </h3>
 
+                <input type="text" name="school_name" required placeholder="Název školy" class="input-field">
+                <input type="text" name="school_address" required placeholder="Adresa školy" class="input-field">
+                <input type="text" name="student_code" required placeholder="Vytvořit kód pro ostatní" class="input-field">
+
+                <div class="border-t border-white/[0.06] my-1"></div>
+                <p class="text-[11px] text-[#5C5F7A] uppercase tracking-wider font-bold">Údaje správce</p>
+
+                <input type="text" name="name" required placeholder="Vaše jméno" class="input-field">
+                <input type="email" name="email" required placeholder="Váš email" class="input-field">
+                <input type="password" name="password" required placeholder="Heslo" class="input-field">
+
+                <button type="submit" class="mt-2 w-full py-3.5 rounded-full font-bold text-sm bg-[#C9F050] text-[#0B0C14] hover:bg-[#d8ff60] transition-all glow-lime">
+                    Vytvořit školu a spravovat
+                </button>
+            </form>
+        </div>
     </div>
 </main>
 
 <script>
-    function togglePassword(id, btn) {
-        const input = document.getElementById(id);
-        const isHidden = input.type === 'password';
-        input.type = isHidden ? 'text' : 'password';
-        btn.innerHTML = isHidden
-            ? `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`
-            : `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+    function switchTab(type) {
+        const studentForm = document.getElementById('form-student');
+        const schoolForm = document.getElementById('form-school');
+        const studentTab = document.getElementById('tab-student');
+        const schoolTab = document.getElementById('tab-school');
+
+        if (type === 'student') {
+            studentForm.classList.remove('hidden');
+            schoolForm.classList.add('hidden');
+            studentTab.classList.add('bg-[#C9F050]', 'text-[#0B0C14]');
+            studentTab.classList.remove('text-[#5C5F7A]');
+            schoolTab.classList.remove('bg-[#C9F050]', 'text-[#0B0C14]');
+            schoolTab.classList.add('text-[#5C5F7A]');
+        } else {
+            schoolForm.classList.remove('hidden');
+            studentForm.classList.add('hidden');
+            schoolTab.classList.add('bg-[#C9F050]', 'text-[#0B0C14]');
+            schoolTab.classList.remove('text-[#5C5F7A]');
+            studentTab.classList.remove('bg-[#C9F050]', 'text-[#0B0C14]');
+            studentTab.classList.add('text-[#5C5F7A]');
+        }
     }
 </script>
 
