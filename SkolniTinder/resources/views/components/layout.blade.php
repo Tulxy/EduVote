@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body { font-family: 'DM Sans', sans-serif; background-color: #0B0C14; color: #F2F1EC; }
         h1, h2, .font-display { font-family: 'Bricolage Grotesque', sans-serif; }
@@ -45,12 +45,38 @@
         <li><a href="{{ url('/ideas') }}" class="text-sm text-[#5C5F7A] hover:text-[#F2F1EC] transition-colors no-underline">Všechny nápady</a></li>
         <li><a href="{{ url('/create') }}" class="text-sm text-[#5C5F7A] hover:text-[#F2F1EC] transition-colors no-underline">Přidat nápad</a></li>
         <li><a href="{{ url('/user-ideas') }}" class="text-sm text-[#5C5F7A] hover:text-[#F2F1EC] transition-colors no-underline">Moje nápady</a></li>
-        @if(auth()->user()->is_admin ?? false)
-            <li><a href="{{ url('/admin') }}" class="text-sm text-[#FF6B52] hover:text-[#ff8a75] transition-colors no-underline">Admin</a></li>
-        @endif
     </ul>
 
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-4">
+        <div class="flex items-center p-3  gap-2">
+            {{-- V navigaci v layoutu --}}
+            @auth
+                @php $status = auth()->user()->accepted; @endphp
+
+                @if(auth()->user()->role === 'admin')
+                    {{-- ADMIN: Vidí klikatelné tlačítko pro správu --}}
+                    <a href="{{ route('school.manage') }}"
+                       class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#C9F050]/10 border border-[#C9F050]/20 text-[#C9F050] text-xs font-bold uppercase hover:bg-[#C9F050] hover:text-black transition-all shadow-[0_0_15px_rgba(201,240,80,0.1)]">
+                        <i class="fa-solid fa-shield"></i>
+                        Správa školy
+                    </a>
+                @else
+                    {{-- STUDENT: Vidí jen neklikatelný stav --}}
+                    <div class="flex items-center gap-3 px-4 py-2 rounded-xl border border-[#2E3046] bg-[#1C1D2A]/50">
+                        @if($status === 'accepted')
+                            <i class="fa-solid fa-circle-check text-[#C9F050]"></i>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-[#C9F050]">Student školy</span>
+                        @elseif($status === 'wait')
+                            <i class="fa-solid fa-circle-exclamation text-yellow-500"></i>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-yellow-500">Čeká na schválení</span>
+                        @else
+                            <i class="fa-solid fa-circle-xmark text-[#FF6B52]"></i>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-[#FF6B52]">Přístup zamítnut</span>
+                        @endif
+                    </div>
+                @endif
+            @endauth
+        </div>
         {{-- Avatar + jméno --}}
         <div class="flex items-center gap-2.5">
             <div class="w-8 h-8 rounded-full bg-[#C9F050]/20 border border-[#C9F050]/30 flex items-center justify-center text-xs font-bold text-[#C9F050]">

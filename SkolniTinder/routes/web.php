@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\SchoolController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,6 +19,11 @@ Route::post('/register/user', [RegisterController::class, 'registerUser'])->name
 Route::get('/autors', function () {
     return view('pages.autors');
 })->name('autors');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/school/manage', [SchoolController::class, 'manage'])->name('school.manage');
+    Route::patch('/user/{user}/status', [SchoolController::class, 'updateStatus'])->name('user.update-status');
+});
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {

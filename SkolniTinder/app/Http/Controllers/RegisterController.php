@@ -35,6 +35,7 @@ class RegisterController extends Controller
             'password' => Hash::make($request->password),
             'school_id' => $school->id, // Tady se to propojí!
             'role' => $request->role,
+            'accepted' => 'wait',
         ]);
 
         Auth::login($user);
@@ -72,6 +73,7 @@ class RegisterController extends Controller
                 'password' => Hash::make($request->password),
                 'school_id' => $school->id,
                 'role' => 'admin',
+                'accepted' => 'accepted',
             ]);
         });
 

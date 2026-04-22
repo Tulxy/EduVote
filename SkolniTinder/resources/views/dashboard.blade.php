@@ -60,7 +60,7 @@
                 {{-- Hlavička sekce --}}
                 <div class="flex items-center justify-between">
                     <h2 class="font-display font-bold text-lg text-[#F2F1EC]">Historie hlasování</h2>
-                    <a href="{{ url('/ideas/create') }}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold bg-[#C9F050] text-[#0B0C14] hover:bg-[#d8ff60] glow-lime transition-all no-underline">
+                    <a href="{{ url('/create') }}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold bg-[#C9F050] text-[#0B0C14] hover:bg-[#d8ff60] glow-lime transition-all no-underline">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                         Přidat nápad
                     </a>
