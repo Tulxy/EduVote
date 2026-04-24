@@ -78,12 +78,23 @@
             @endauth
         </div>
         {{-- Avatar + jméno --}}
-        <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-full bg-[#C9F050]/20 border border-[#C9F050]/30 flex items-center justify-center text-xs font-bold text-[#C9F050]">
-                {{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 1)) }}
+        <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 group no-underline">
+            <div class="hidden lg:block text-right mr-1">
+                <div class="text-[15px] font-bold text-[#F2F1EC] leading-none group-hover:text-[#C9F050] transition-colors">{{ auth()->user()->name }}</div>
+                <div class="text-[13px] text-[#5C5F7A] uppercase tracking-tighter">Můj profil</div>
             </div>
-            <span class="hidden sm:block text-sm text-[#E8E7F0]">{{ auth()->user()->name ?? 'Uživatel' }}</span>
-        </div>
+
+            @if(auth()->user()->avatar)
+                {{-- Pokud uživatel MÁ vybraného avatara --}}
+                <img src="{{ asset('images/avatars/' . auth()->user()->avatar) }}"
+                     class="w-11 h-11 rounded-xl border border-[#C9F050]/20 object-cover group-hover:border-[#C9F050] transition-all">
+            @else
+                {{-- Pokud uživatel NEMÁ avatara, ukážeme písmeno --}}
+                <div class="w-11 h-11 rounded-xl bg-[#C9F050] flex items-center justify-center text-[#0B0C14] font-bold text-lg shadow-[0_0_15px_rgba(201,240,80,0.2)] group-hover:scale-105 transition-transform">
+                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                </div>
+            @endif
+        </a>
 
         {{-- Logout --}}
         <form method="POST" action="{{ route('logout') }}">
