@@ -10,15 +10,19 @@ class SchoolController extends Controller
 {
     public function manage()
     {
-        // Získáme školu aktuálně přihlášeného uživatele (admina)
-        $school = Auth::user()->school;
+        $school = auth()->user()->school;
+        $members = $school->users; // nebo tvůj query
 
-        // Vytáhneme všechny uživatele, kteří patří do této školy
-        $members = User::where('school_id', $school->id)
-            ->orderBy('role', 'asc') // Admini nahoře
-            ->get();
+        // Statistiky
+        $stats = [
+            'total' => $members->count(),
+            'admins' => $members->where('role', 'admin')->count(),
+            'teachers' => $members->where('role', 'teacher')->count(),
+            'students' => $members->where('role', 'student')->count(),
+            'waiting' => $members->where('accepted', 'wait')->count(),
+        ];
 
-        return view('pages.school.manage', compact('school', 'members'));
+        return view('pages.school.manage', compact('school', 'members', 'stats'));
     }
     public function updateStatus(Request $request, User $user)
     {

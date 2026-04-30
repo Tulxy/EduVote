@@ -19,6 +19,134 @@
             </h1>
         </div>
 
+        {{-- Statistiky školy --}}
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10 fade-up-2">
+
+            {{-- 1. KARTA: Složení týmu --}}
+            <div class="bg-[#1C1D2A]/60 backdrop-blur-md border border-[#2E3046] p-6 rounded-2xl relative overflow-hidden">
+                <p class="text-xs text-[#5C5F7A] uppercase tracking-widest mb-4 font-bold">Struktura školy</p>
+                <div class="flex items-end justify-between mb-4">
+                    <h3 class="text-4xl font-display font-black text-[#F2F1EC]">{{ $stats['total'] }}</h3>
+                    <span class="text-xs text-[#5C5F7A] mb-1">Celkem členů</span>
+                </div>
+                <div class="space-y-2 border-t border-[#2E3046] pt-4">
+                    <div class="flex justify-between text-xs">
+                        <span class="text-[#5C5F7A]">Administrátoři:</span>
+                        <span class="text-[#7eb6ff] font-bold">{{ $stats['admins'] }}</span>
+                    </div>
+                    <div class="flex justify-between text-xs">
+                        <span class="text-[#5C5F7A]">Pedagogové:</span>
+                        <span class="text-[#C9F050] font-bold">{{ $stats['teachers'] }}</span>
+                    </div>
+                    <div class="flex justify-between text-xs">
+                        <span class="text-[#5C5F7A]">Studenti:</span>
+                        <span class="text-[#F2F1EC] font-bold">{{ $stats['students'] }}</span>
+                    </div>
+                </div>
+            </div>
+
+            {{-- 2. KARTA: Čekající fronta --}}
+            <div class="bg-[#1C1D2A]/60 backdrop-blur-md border border-[#2E3046] p-6 rounded-2xl flex flex-col justify-between group">
+                <div>
+                    <p class="text-xs text-[#5C5F7A] uppercase tracking-widest mb-1 font-bold">Nové žádosti</p>
+                    <h3 class="text-5xl font-display font-black {{ $stats['waiting'] > 0 ? 'text-yellow-500' : 'text-[#F2F1EC]' }}">
+                        {{ $stats['waiting'] }}
+                    </h3>
+                </div>
+                <div class="mt-4 p-3 rounded-xl {{ $stats['waiting'] > 0 ? 'bg-yellow-500/10 border border-yellow-500/20' : 'bg-[#2E3046]/20 border border-[#2E3046]' }}">
+                    <p class="text-[10px] {{ $stats['waiting'] > 0 ? 'text-yellow-500' : 'text-[#5C5F7A]' }} leading-relaxed">
+                        @if($stats['waiting'] > 0)
+                            <i class="fa-solid fa-circle-exclamation mr-1 animate-pulse"></i> Máte nevyřízené žádosti o vstup do školy.
+                        @else
+                            Všechny žádosti byly vyřízeny.
+                        @endif
+                    </p>
+                </div>
+            </div>
+
+            {{-- 3. KARTA: Kód školy s kopírováním --}}
+            <div class="bg-[#C9F050] p-6 rounded-2xl flex flex-col justify-between shadow-[0_20px_50px_rgba(201,240,80,0.15)] relative overflow-hidden h-full">
+                {{-- Dekorativní prvek na pozadí --}}
+                <div class="absolute -right-4 -bottom-4 text-black/5 text-8xl rotate-12 uppercase font-black pointer-events-none">Code</div>
+
+                <div class="relative z-10">
+                    <div class="flex justify-between items-start mb-1">
+                        <p class="text-[10px] text-black/60 uppercase tracking-[0.2em] font-bold">Unikátní kód školy</p>
+
+                        {{-- Tlačítko se zámečkem --}}
+                        <button onclick="toggleCode()" id="lockBtn" class="text-black/40 hover:text-black transition-colors">
+                            <i id="lockIcon" class="fa-solid fa-lock text-sm"></i>
+                        </button>
+                    </div>
+
+                    {{-- Samotný kód s blur efektem --}}
+
+                </div>
+                <h3 id="schoolCode" class="text-4xl mx-auto font-display font-black text-black tracking-widest transition-all duration-300 blur-sm select-none">
+                    {{ $school->student_code }}
+                </h3>
+                {{-- Tlačítko pro kopírování --}}
+                <button onclick="copySchoolCode()" class="relative z-10 mt-6 w-full py-3 bg-black text-[#C9F050] rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-black/80 active:scale-[0.98] transition-all flex items-center justify-center gap-2 group">
+                    <i class="fa-regular fa-copy group-hover:rotate-12 transition-transform"></i>
+                    <span id="copyText">Kopírovat kód</span>
+                </button>
+            </div>
+
+            <script>
+                function toggleCode() {
+                    const code = document.getElementById('schoolCode');
+                    const icon = document.getElementById('lockIcon');
+
+                    // Kontrolujeme, jestli je kód aktuálně zamčený
+                    const isLocked = code.classList.contains('blur-sm');
+
+                    if (isLocked) {
+                        // AKCE: ODEMKNOUT
+                        code.classList.remove('blur-sm', 'select-none');
+                        icon.classList.replace('fa-lock', 'fa-lock-open');
+                        icon.parentElement.classList.add('text-black');
+                    } else {
+                        // AKCE: ZAMKNOUT
+                        code.classList.add('blur-sm', 'select-none');
+                        icon.classList.replace('fa-lock-open', 'fa-lock');
+                        icon.parentElement.classList.remove('text-black');
+                    }
+                }
+
+                function copySchoolCode() {
+                    const codeElement = document.getElementById('schoolCode');
+                    const btnText = document.getElementById('copyText');
+
+                    // 1. Pokud je zamčeno, na chvíli odemkneme pro vizuální efekt
+                    const wasLocked = codeElement.classList.contains('blur-sm');
+                    if (wasLocked) {
+                        toggleCode();
+                    }
+
+                    // 2. Kopírování do schránky
+                    const codeValue = codeElement.innerText.trim();
+
+                    navigator.clipboard.writeText(codeValue).then(() => {
+                        const originalText = btnText.innerText;
+                        btnText.innerText = 'Zkopírováno!';
+
+                        // 3. Po 2 sekundách vrátíme text a kód zase zamkneme
+                        setTimeout(() => {
+                            btnText.innerText = originalText;
+
+                            // Pokud byl kód předtím zamčený (nebo ho chceme zamknout vždy), zamkneme ho
+                            if (!codeElement.classList.contains('blur-sm')) {
+                                toggleCode();
+                            }
+                        }, 2000);
+                    }).catch(err => {
+                        console.error('Chyba při kopírování: ', err);
+                    });
+                }
+            </script>
+
+        </div>
+
         {{-- Tabulka členů ve stejném stylu jako "Idea cards" --}}
         <div class="bg-[#1C1D2A]/60 backdrop-blur-md border border-[#2E3046] rounded-2xl overflow-hidden shadow-2xl fade-up-2">
             <table class="w-full text-left border-collapse">
@@ -75,3 +203,4 @@
         </div>
     </main>
 </x-layout>
+
