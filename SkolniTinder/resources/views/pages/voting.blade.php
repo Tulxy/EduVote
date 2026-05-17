@@ -70,25 +70,22 @@
         {{-- Card Stack --}}
         <div class="card-stack fade-up" id="card-stack">
             @php
-                $demoIdeas = [
-                    ['id'=>1,'category'=>'Prostředí','title'=>'Odpočinkové zóny na chodbách','description'=>'Přidat pohodlné sedačky a zelené rostliny na hlavní chodbě, aby měli žáci místo k relaxaci mezi hodinami.','author'=>'Jana K.','votes'=>47],
-                    ['id'=>2,'category'=>'Technika','title'=>'Rychlejší Wi-Fi v knihovně','description'=>'Současné připojení nestačí pro práci více lidí najednou. Navrhuju upgrade routerů v celé budově školy.','author'=>'Tomáš M.','votes'=>31],
-                    ['id'=>3,'category'=>'Komunita','title'=>'Školní komunitní zahrada','description'=>'Vytvořit malou zahradu u jídelny, kde by žáci pěstovali zeleninu a byliny na vaření ve školní kuchyni.','author'=>'Lucie V.','votes'=>19],
-                    ['id'=>4,'category'=>'Technika','title'=>'3D tiskárna do dílen','description'=>'Moderní nástroj pro technické předměty a kreativní projekty. Škola v Brně ji má a žáci ji milují.','author'=>'Martin H.','votes'=>12],
-                    ['id'=>5,'category'=>'Prostředí','title'=>'Více zrcadel na toaletách','description'=>'Na dívčích i chlapeckých toaletách je jen jedno zrcadlo na patro. Bylo by fajn přidat aspoň dvě další.','author'=>'Petra N.','votes'=>8],
-                ];
-                $allIdeas = $ideas ?? $demoIdeas;
+                // Pokud z controlleru nic nepřijde, pro jistotu dosadíme prázdné pole, aby web nespadl
+                $allIdeas = $ideas ?? collect();
                 $total = count($allIdeas);
             @endphp
 
-            @foreach(array_reverse($allIdeas) as $i => $idea)
+            @forelse(array_reverse($allIdeas->all()) as $i => $idea)
                 @php
-                    $cat = is_array($idea) ? $idea['category'] : $idea->category;
-                    $title = is_array($idea) ? $idea['title'] : $idea->title;
-                    $desc = is_array($idea) ? $idea['description'] : $idea->description;
-                    $author = is_array($idea) ? $idea['author'] : $idea->user->name;
-                    $votes = is_array($idea) ? $idea['votes'] : $idea->votes_count;
-                    $id = is_array($idea) ? $idea['id'] : $idea->id;
+                    // Bezpečně taháme data z Eloquent modelu Idea
+                    $title = $idea->title;
+                    $desc = $idea->description;
+                    $author = $idea->user->name ?? 'Anonym';
+                    $votes = $idea->votes_count ?? 0; // Předpokládá se count relací, případně sloupec v DB
+                    $id = $idea->id;
+
+                    // Dynamická kategorie (pokud ji v DB nemáš, uprav si podle potřeby)
+                    $cat = $idea->category ?? 'Prostředí';
                     $catColor = match($cat) {
                         'Technika'   => ['bg-[#7eb6ff]/10','text-[#7eb6ff]'],
                         'Prostředí'  => ['bg-[#C9F050]/10','text-[#C9F050]'],
@@ -142,7 +139,12 @@
                         </div>
                     @endif
                 </div>
-            @endforeach
+            @empty
+                {{-- Pokud škola nemá žádné nápady, zobrazíme rovnou prázdný stav --}}
+                <div class="text-center py-12">
+                    <p class="text-sm text-[#5C5F7A]">Pro vaši školu zatím nebyly vytvořeny žádné nápady.</p>
+                </div>
+            @endforelse
         </div>
 
         {{-- Action buttons --}}

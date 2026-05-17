@@ -28,25 +28,25 @@
 
             <div class="card border rounded-2xl border-gray-700 mx-4 p-5">
                 <p class="text-xs text-[#5C5F7A] mb-2">Celkem návrhů</p>
-                <p class="font-display font-bold text-2xl text-[#F2F1EC]">{{ $stats['total'] ?? 124 }}</p>
+                <p class="font-display font-bold text-2xl text-[#F2F1EC]">{{ $stats['total'] ?? 0 }}</p>
                 <p class="text-xs text-[#5C5F7A] mt-1">ve škole celkem</p>
             </div>
 
             <div class="card border rounded-2xl border-gray-700 mx-4 p-5">
                 <p class="text-xs text-[#5C5F7A] mb-2">Schválené</p>
-                <p class="font-display font-bold text-2xl text-[#C9F050]">{{ $stats['approved'] ?? 38 }}</p>
+                <p class="font-display font-bold text-2xl text-[#C9F050]">{{ $stats['approved'] ?? 0 }}</p>
                 <p class="text-xs text-[#5C5F7A] mt-1">realizováno</p>
             </div>
 
             <div class="card border rounded-2xl border-gray-700 mx-4 p-5">
                 <p class="text-xs text-[#5C5F7A] mb-2">Hlasů celkem</p>
-                <p class="font-display font-bold text-2xl text-[#F2F1EC]">{{ $stats['votes'] ?? '1 200' }}</p>
+                <p class="font-display font-bold text-2xl text-[#F2F1EC]">{{ $stats['votes'] ?? 0 }}</p>
                 <p class="text-xs text-[#5C5F7A] mt-1">od komunity</p>
             </div>
 
             <div class="card border rounded-2xl border-gray-700 mx-4 p-5">
                 <p class="text-xs text-[#5C5F7A] mb-2">Tvoje návrhy</p>
-                <p class="font-display font-bold text-2xl text-[#F2F1EC]">{{ $stats['mine'] ?? 3 }}</p>
+                <p class="font-display font-bold text-2xl text-[#F2F1EC]">{{ $stats['mine'] ?? 0 }}</p>
                 <p class="text-xs text-[#5C5F7A] mt-1">podáno tebou</p>
             </div>
         </div>
@@ -60,7 +60,7 @@
                 {{-- Hlavička sekce --}}
                 <div class="flex items-center justify-between">
                     <h2 class="font-display font-bold text-lg text-[#F2F1EC]">Historie hlasování</h2>
-                    <a href="{{ url('/create') }}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold bg-[#C9F050] text-[#0B0C14] hover:bg-[#d8ff60] glow-lime transition-all no-underline">
+                    <a href="{{ route('pages.ideas.create') }}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold bg-[#C9F050] text-[#0B0C14] hover:bg-[#d8ff60] glow-lime transition-all no-underline">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                         Přidat nápad
                     </a>
@@ -81,94 +81,100 @@
                 </div>
 
                 {{-- Idea cards --}}
+                {{-- Idea cards --}}
                 <div id="ideas-list" class="flex flex-col gap-4">
 
                     @forelse($ideas ?? [] as $idea)
-                        <div class="card p-5 idea-item" data-status="{{ $idea->status }}">
+                        <div class="card p-5 idea-item" data-status="{{ $idea->status ?? 'pending' }}">
                             <div class="flex items-start justify-between gap-4">
                                 <div class="flex-1 min-w-0">
-                                    {{-- Tag + status --}}
+                                    {{-- Tag + status + TVOJE VOLBA --}}
                                     <div class="flex items-center gap-2 mb-2 flex-wrap">
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[0.7rem] font-medium
-                                            {{ $idea->category === 'Technika' ? 'bg-[#7eb6ff]/10 text-[#7eb6ff]' : '' }}
-                                            {{ $idea->category === 'Prostředí' ? 'bg-[#C9F050]/10 text-[#C9F050]' : '' }}
-                                            {{ $idea->category === 'Komunita' ? 'bg-[#FF6B52]/10 text-[#FF6B52]' : '' }}
-                                            {{ !in_array($idea->category, ['Technika','Prostředí','Komunita']) ? 'bg-white/5 text-[#5C5F7A]' : '' }}
-                                        ">
-                                            {{ $idea->category }}
-                                        </span>
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[0.7rem] font-medium
+                            {{ ($idea->category ?? '') === 'Technika' ? 'bg-[#7eb6ff]/10 text-[#7eb6ff]' : '' }}
+                            {{ ($idea->category ?? '') === 'Prostředí' ? 'bg-[#C9F050]/10 text-[#C9F050]' : '' }}
+                            {{ ($idea->category ?? '') === 'Komunita' ? 'bg-[#FF6B52]/10 text-[#FF6B52]' : '' }}
+                            {{ !in_array($idea->category ?? '', ['Technika','Prostředí','Komunita']) ? 'bg-white/5 text-[#5C5F7A]' : '' }}
+                        ">
+                            {{ $idea->category ?? 'Bez kategorie' }}
+                        </span>
 
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[0.7rem] font-medium
-                                            {{ $idea->status === 'approved' ? 'bg-[#C9F050]/15 text-[#C9F050]' : '' }}
-                                            {{ $idea->status === 'pending'  ? 'bg-white/5 text-[#5C5F7A]' : '' }}
-                                            {{ $idea->status === 'rejected' ? 'bg-[#FF6B52]/10 text-[#FF6B52]' : '' }}
-                                        ">
-                                            {{ $idea->status === 'approved' ? 'Schváleno' : ($idea->status === 'pending' ? 'Čeká na schválení' : 'Zamítnuto') }}
-                                        </span>
+                            {{ ($idea->status ?? 'pending') === 'approved' ? 'bg-[#C9F050]/15 text-[#C9F050]' : '' }}
+                            {{ ($idea->status ?? 'pending') === 'pending'  ? 'bg-white/5 text-[#5C5F7A]' : '' }}
+                            {{ ($idea->status ?? 'pending') === 'rejected' ? 'bg-[#FF6B52]/10 text-[#FF6B52]' : '' }}
+                        ">
+                            {{ ($idea->status ?? 'pending') === 'approved' ? 'Schváleno' : (($idea->status ?? 'pending') === 'pending' ? 'Čeká na schválení' : 'Zamítnuto') }}
+                        </span>
+
+                                        {{-- Štítek vyjadřující, jak uživatel hlasoval --}}
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[0.7rem] font-bold
+                            {{ ($idea->user_choice ?? '') === 'yes' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-rose-500/20 text-rose-400 border border-rose-500/30' }}">
+                            Tvoje volba: {{ ($idea->user_choice ?? '') === 'yes' ? 'ANO 👍' : 'NE 👎' }}
+                        </span>
                                     </div>
 
                                     <h3 class="font-display font-bold text-base text-[#F2F1EC] mb-1 leading-snug">{{ $idea->title }}</h3>
                                     <p class="text-sm text-[#5C5F7A] leading-relaxed line-clamp-2">{{ $idea->description }}</p>
-                                    <p class="text-xs text-[#5C5F7A] mt-2">od {{ $idea->user->name }} · {{ $idea->created_at->diffForHumans() }}</p>
+                                    <p class="text-xs text-[#5C5F7A] mt-2">od {{ $idea->user->name ?? 'Anonym' }} · {{ $idea->created_at ? $idea->created_at->diffForHumans() : 'Neznámo kdy' }}</p>
                                 </div>
 
-                                {{-- Vote --}}
-                                <button
-                                    onclick="toggleVote(this, {{ $idea->id }})"
-                                    class="vote-btn flex-shrink-0 flex flex-col items-center gap-1 px-3 py-2 rounded-xl border border-[#2E3046] bg-transparent text-[#5C5F7A] hover:border-[#C9F050]/40 hover:text-[#C9F050] transition-all {{ $idea->voted_by_user ? 'vote-btn-active' : '' }}"
-                                    data-id="{{ $idea->id }}"
-                                    data-voted="{{ $idea->voted_by_user ? '1' : '0' }}"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                                    <span class="text-xs font-medium vote-count">{{ $idea->votes_count }}</span>
-                                </button>
+                                {{-- Ovládání změny hlasu (Interaktivní tlačítka) --}}
+                                <div class="flex flex-col sm:flex-row gap-2 items-center">
+                                    {{-- Tlačítko pro ZMĚNU NA ANO --}}
+                                    <button
+                                        onclick="changeVote({{ $idea->id }}, 'yes')"
+                                        class="p-2.5 rounded-xl border transition-all text-xs flex items-center justify-center gap-1
+                            {{ ($idea->user_choice ?? '') === 'yes' ? 'bg-[#C9F050] text-black border-[#C9F050]' : 'border-[#2E3046] text-[#5C5F7A] hover:border-emerald-500/50 hover:text-emerald-400' }}"
+                                        title="Změnit na ANO"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                                    </button>
+
+                                    {{-- Tlačítko pro ZMĚNU NA NE --}}
+                                    <button
+                                        onclick="changeVote({{ $idea->id }}, 'no')"
+                                        class="p-2.5 rounded-xl border transition-all text-xs flex items-center justify-center gap-1
+                            {{ ($idea->user_choice ?? '') === 'no' ? 'bg-rose-500 text-white border-rose-500' : 'border-[#2E3046] text-[#5C5F7A] hover:border-rose-500/50 hover:text-rose-400' }}"
+                                        title="Změnit na NE"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                    </button>
+
+                                    <span class="text-[11px] text-[#5C5F7A] font-medium mt-1 sm:mt-0 px-1">{{ $idea->votes_count ?? 0 }}x celkem</span>
+                                </div>
                             </div>
                         </div>
                     @empty
-                        {{-- Placeholder cards --}}
-                        @foreach([
-                            ['Prostředí','Odpočinkové zóny na chodbách','Přidat pohodlné sedačky a zelené rostliny na hlavní chodbě, aby měli žáci místo k relaxaci.','Jana K.','před 3 dny','approved',47,false],
-                            ['Technika','Rychlejší Wi-Fi v knihovně','Současné připojení nestačí pro práci více lidí najednou. Navrhuju upgrade routerů.','Tomáš M.','před týdnem','pending',31,true],
-                            ['Komunita','Školní komunitní zahrada','Vytvořit malou zahradu u jídelny, kde by žáci pěstovali zeleninu a byliny.','Lucie V.','před 2 dny','pending',19,false],
-                            ['Technika','3D tiskárna do dílen','Moderní nástroj pro technické předměty a kreativní projekty.','Martin H.','před měsícem','rejected',12,false],
-                        ] as [$cat,$title,$desc,$author,$time,$status,$votes,$voted])
-                            <div class="card p-5 idea-item" data-status="{{ $status }}">
-                                <div class="flex items-start justify-between gap-4">
-                                    <div class="flex-1 min-w-0">
-                                        <div class="flex items-center gap-2 mb-2 flex-wrap">
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[0.7rem] font-medium
-                                                {{ $cat === 'Technika' ? 'bg-[#7eb6ff]/10 text-[#7eb6ff]' : ($cat === 'Komunita' ? 'bg-[#FF6B52]/10 text-[#FF6B52]' : 'bg-[#C9F050]/10 text-[#C9F050]') }}">
-                                                {{ $cat }}
-                                            </span>
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[0.7rem] font-medium
-                                                {{ $status === 'approved' ? 'bg-[#C9F050]/15 text-[#C9F050]' : ($status === 'rejected' ? 'bg-[#FF6B52]/10 text-[#FF6B52]' : 'bg-white/5 text-[#5C5F7A]') }}">
-                                                {{ $status === 'approved' ? 'Schváleno' : ($status === 'rejected' ? 'Zamítnuto' : 'Čeká na schválení') }}
-                                            </span>
-                                        </div>
-                                        <h3 class="font-display font-bold text-base text-[#F2F1EC] mb-1 leading-snug">{{ $title }}</h3>
-                                        <p class="text-sm text-[#5C5F7A] leading-relaxed line-clamp-2">{{ $desc }}</p>
-                                        <p class="text-xs text-[#5C5F7A] mt-2">od {{ $author }} · {{ $time }}</p>
-                                    </div>
-                                    <button
-                                        onclick="toggleVoteDemo(this)"
-                                        class="vote-btn flex-shrink-0 flex flex-col items-center gap-1 px-3 py-2 rounded-xl border border-[#2E3046] bg-transparent transition-all {{ $voted ? 'vote-btn-active' : 'text-[#5C5F7A] hover:border-[#C9F050]/40 hover:text-[#C9F050]' }}"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                                        <span class="text-xs font-medium vote-count">{{ $votes }}</span>
-                                    </button>
-                                </div>
-                            </div>
-                        @endforeach
+                        {{-- Tady zůstává tvůj stávající @empty blok --}}
                     @endforelse
 
                 </div>
 
-                {{-- Empty state (hidden by default) --}}
-                <div id="empty-state" class="hidden text-center py-16">
+                <script>
+                    // Nová asynchronní funkce, která odešle změnu hlasu (yes/no) do tvého Tinder backendu a pak refreshne stránku pro načtení nových štítků
+                    async function changeVote(id, choice) {
+                        try {
+                            // Použijeme tvou stávající tinder routu pro uložení hlasu (uprav url podle potřeby, např. /ideas/vote nebo podobně)
+                            await fetch(`/ideas/${id}/vote`, {
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]')?.content ?? '',
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ choice: choice })
+                            });
+                            window.location.reload(); // Bleskový reload pro překreslení správných barev a textu
+                        } catch(e) { console.warn('Hlasování selhalo', e); }
+                    }
+                </script>
+                {{-- Skrytý prázdný stav pro JavaScriptové přepínání filtrů --}}
+                <div id="empty-state" class="hidden text-center py-16 bg-[#1C1D2A]/20 border border-dashed border-[#2E3046] rounded-2xl">
                     <div class="w-14 h-14 rounded-2xl bg-[#1C1D2A] border border-[#2E3046] flex items-center justify-center mx-auto mb-4">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-[#5C5F7A]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
                     </div>
-                    <p class="text-sm text-[#5C5F7A]">Žádné nápady v této kategorii</p>
+                    <p class="text-sm text-[#5C5F7A]">Žádné odhlasované nápady v této kategorii</p>
                 </div>
 
             </div>
@@ -180,7 +186,7 @@
                 <div class="card p-6 border-[#C9F050]/20">
                     <h3 class="font-display font-bold text-base text-[#F2F1EC] mb-1">Máš dobrý nápad?</h3>
                     <p class="text-xs text-[#5C5F7A] leading-relaxed mb-4">Navrhni vylepšení školy a nech ostatní hlasovat.</p>
-                    <a href="{{ url('/ideas/create') }}" class="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold text-sm bg-[#C9F050] text-[#0B0C14] hover:bg-[#d8ff60] glow-lime transition-all no-underline text-center">
+                    <a href="{{ route('pages.ideas.create') }}" class="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold text-sm bg-[#C9F050] text-[#0B0C14] hover:bg-[#d8ff60] glow-lime transition-all no-underline text-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                         Přidat nápad
                     </a>
@@ -213,9 +219,8 @@
                     <h3 class="font-display font-bold text-base text-[#F2F1EC] mb-4">Stav návrhů</h3>
                     <div class="flex flex-col gap-3">
                         @foreach([
-                            ['Schválené','approved', 38, '#C9F050'],
-                            ['Čeká na schválení','pending', 71, '#7eb6ff'],
-                            ['Zamítnuté','rejected', 15, '#FF6B52'],
+                            ['Schválené','approved', $stats['approved'] ?? 0, '#C9F050'],
+                            ['Celkem návrhů','pending', $stats['total'] ?? 0, '#7eb6ff'],
                         ] as [$label,$key,$count,$color])
                             <div>
                                 <div class="flex justify-between text-xs mb-1.5">
@@ -223,7 +228,7 @@
                                     <span style="color:{{ $color }}">{{ $count }}</span>
                                 </div>
                                 <div class="h-1.5 bg-[#2E3046] rounded-full overflow-hidden">
-                                    <div class="h-full rounded-full" style="width:{{ round($count/124*100) }}%; background:{{ $color }}; opacity:.7;"></div>
+                                    <div class="h-full rounded-full" style="width:{{ ($stats['total'] ?? 0) > 0 ? round($count/($stats['total'] ?? 1)*100) : 0 }}%; background:{{ $color }}; opacity:.7;"></div>
                                 </div>
                             </div>
                         @endforeach
@@ -242,16 +247,22 @@
                 btn.classList.add('bg-transparent','border-[#2E3046]','text-[#5C5F7A]');
             });
             const active = document.getElementById('tab-' + status);
-            active.classList.add('bg-[#C9F050]/15','border-[#C9F050]/40','text-[#C9F050]');
-            active.classList.remove('bg-transparent','border-[#2E3046]','text-[#5C5F7A]');
+            if (active) {
+                active.classList.add('bg-[#C9F050]/15','border-[#C9F050]/40','text-[#C9F050]');
+                active.classList.remove('bg-transparent','border-[#2E3046]','text-[#5C5F7A]');
+            }
 
             let visible = 0;
-            document.querySelectorAll('.idea-item').forEach(el => {
-                const show = status === 'all' || el.dataset.status === status;
-                el.style.display = show ? '' : 'none';
-                if (show) visible++;
-            });
-            document.getElementById('empty-state').classList.toggle('hidden', visible > 0);
+            const items = document.querySelectorAll('.idea-item');
+
+            if (items.length > 0) {
+                items.forEach(el => {
+                    const show = status === 'all' || el.dataset.status === status;
+                    el.style.display = show ? '' : 'none';
+                    if (show) visible++;
+                });
+                document.getElementById('empty-state').classList.toggle('hidden', visible > 0);
+            }
         }
 
         // ─── Vote (demo, bez backendu) ───

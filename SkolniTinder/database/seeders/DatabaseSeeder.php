@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\School;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,11 +17,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Přidali jsme pole 'address'
+        $school = School::create([
+            'name' => 'Testovací škola',
+            'student_code' => 'ABCDE',
+            'address' => 'Vymyšlená 123, Praha',
+        ]);
 
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+            'school_id' => $school->id,
         ]);
     }
 }

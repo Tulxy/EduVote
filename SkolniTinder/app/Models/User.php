@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 
 class User extends Authenticatable
 {
@@ -36,4 +38,10 @@ class User extends Authenticatable
     // Relace
     public function school() { return $this->belongsTo(School::class); }
     public function ideas() { return $this->hasMany(Idea::class); }
+    public function votedIdeas(): BelongsToMany
+    {
+        return $this->belongsToMany(Idea::class, 'votes', 'user_id', 'idea_id')
+            ->withPivot('choice')
+            ->withTimestamps();
+    }
 }

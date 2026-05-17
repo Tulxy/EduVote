@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ isset($title) ? $title . ' - EduVote' : 'EduVote' }}</title>
 
@@ -42,8 +43,8 @@
             </a>
         </li>
         <li><a href="{{ url('/voting') }}" class="text-sm text-[#C9F050] hover:text-[#F2F1EC] transition-colors no-underline">Hlasování</a></li>
-        <li><a href="{{ url('/ideas') }}" class="text-sm text-[#5C5F7A] hover:text-[#F2F1EC] transition-colors no-underline">Všechny nápady</a></li>
-        <li><a href="{{ url('/create') }}" class="text-sm text-[#5C5F7A] hover:text-[#F2F1EC] transition-colors no-underline">Přidat nápad</a></li>
+        <li><a href="{{ url('pages/ideas') }}" class="text-sm text-[#5C5F7A] hover:text-[#F2F1EC] transition-colors no-underline">Všechny nápady</a></li>
+        <li><a href="{{ route('pages.ideas.create') }}" class="text-sm text-[#5C5F7A] hover:text-[#F2F1EC] transition-colors no-underline">Přidat nápad</a></li>
         <li><a href="{{ url('/user-ideas') }}" class="text-sm text-[#5C5F7A] hover:text-[#F2F1EC] transition-colors no-underline">Moje nápady</a></li>
     </ul>
 

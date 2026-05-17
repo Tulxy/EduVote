@@ -119,9 +119,6 @@
     {{-- RIGHT – floating cards --}}
     <div class="relative h-[520px] hidden lg:block" aria-hidden="true">
 
-        {{-- Pulse dots --}}
-        <div class="absolute top-[165px] left-[220px] w-2 h-2 rounded-full bg-[#2E3046] border-2 border-[#5C5F7A] pulse-dot"></div>
-        <div class="absolute top-[300px] right-[180px] w-2 h-2 rounded-full bg-[#2E3046] border-2 border-[#5C5F7A] pulse-dot-2"></div>
 
         {{-- Card 1 --}}
         <div class="float-1 absolute top-5 left-10 w-[260px] bg-[#1C1D2A] border border-[#2E3046] rounded-2xl p-4 hover:-translate-y-1 transition-transform cursor-default">
